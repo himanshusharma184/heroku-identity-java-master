@@ -248,10 +248,11 @@ public class SAMLServlet extends HttpServlet {
 
 		String url = request.getRequestURL().toString();
 		// herokuism
-		// url = url.replaceFirst("http", "https");
+		url = url.replaceFirst("http", "https");
 
 		// Get the SAMLResponse and RelayState
 		String encodedResponse = request.getParameter("SAMLResponse");
+		System.out.println(encodedResponse);
 		String relayState = request.getParameter("RelayState");
 		if ((relayState == null) || (relayState.equals("")))
 			relayState = "/";
