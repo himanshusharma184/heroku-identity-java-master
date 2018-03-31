@@ -62,7 +62,7 @@ public class SAMLServlet extends HttpServlet {
 
 		System.out.println("initiating login here Hsharma");
 		try {
-			scanner = new Scanner(new File("C://Users/hsharma015/Downloads/IDCSMetadata.xml"));
+			scanner = new Scanner(new File("src/main/webapp/WEB-INF/IDCSMetadata.xml"));
 
 			samlMetadata = scanner.useDelimiter("\\A").next();
 			scanner.close();
