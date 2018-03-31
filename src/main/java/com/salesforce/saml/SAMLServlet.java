@@ -244,6 +244,8 @@ public class SAMLServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		System.out.println("validating incoming SAML assertion ....");
+
 		String url = request.getRequestURL().toString();
 		// herokuism
 		// url = url.replaceFirst("http", "https");
@@ -275,6 +277,7 @@ public class SAMLServlet extends HttpServlet {
 			response.sendError(401, "Access Denied: " + e.getMessage());
 			return;
 		}
+		System.out.println("done validating assertion ....");
 		response.sendRedirect(relayState);
 
 	}
