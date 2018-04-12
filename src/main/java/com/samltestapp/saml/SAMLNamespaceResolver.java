@@ -1,4 +1,4 @@
-package com.salesforce.saml;
+package com.samltestapp.saml;
 
 import javax.xml.namespace.NamespaceContext;
 import java.util.Iterator;

@@ -27,7 +27,7 @@
  */
 
 
-package com.salesforce.util;
+package com.samltestapp.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

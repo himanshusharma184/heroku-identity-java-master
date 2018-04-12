@@ -1,19 +1,14 @@
-package com.salesforce.saml;
+package com.samltestapp.saml;
 
-import com.salesforce.util.Bag;
-import com.salesforce.util.XSDDateTime;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+
+import com.samltestapp.util.Bag;
+import com.samltestapp.util.XSDDateTime;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -49,6 +44,10 @@ import java.util.zip.DeflaterOutputStream;
 
 public class SAMLServlet extends HttpServlet {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6922299528488813094L;
 	private static final String SAML_REQUEST = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\" AssertionConsumerServiceURL=\"{0}\" Destination=\"{1}\" ID=\"_{2}\" IssueInstant=\"{3}\" ProtocolBinding=\"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST\" Version=\"2.0\"><saml:Issuer xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">{4}</saml:Issuer></samlp:AuthnRequest>";
 	private Boolean INITIALIZED = false;
 	private String ISSUER = null;
@@ -67,7 +66,6 @@ public class SAMLServlet extends HttpServlet {
 			samlMetadata = scanner.useDelimiter("\\A").next();
 			scanner.close();
 		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -88,7 +86,6 @@ public class SAMLServlet extends HttpServlet {
 				throw new ServletException("Error decoding SAML Metadata", e);
 			}
 
-			// Setup XPath
 			NamespaceContext namespaceContext = new SAMLNamespaceResolver();
 			XPathFactory factory = XPathFactory.newInstance();
 			XPath xpath = factory.newXPath();
@@ -107,30 +104,8 @@ public class SAMLServlet extends HttpServlet {
 
 				XPathExpression certXPath = xpath.compile(
 						"/md:EntityDescriptor/md:IDPSSODescriptor/md:KeyDescriptor/ds:KeyInfo/ds:X509Data/ds:X509Certificate");
-				NodeList certXPathResult = (NodeList) certXPath.evaluate(metadataDocument, XPathConstants.NODESET);
-
 				StringBuffer encodedCert = new StringBuffer("-----BEGIN CERTIFICATE-----\n");
-				// encodedCert.append(certNode.getTextContent());
 
-				// String cert =
-				// "MIIDXzCCAkegAwIBAgIGAWFO2ktsMA0GCSqGSIb3DQEBCwUAMFcxEzARBgoJkiaJ
-				// k/IsZAEZFgNjb20xFjAUBgoJkiaJk/IsZAEZFgZvcmFjbGUxFTATBgoJkiaJk/Is
-				// ZAEZFgVjbG91ZDERMA8GA1UEAxMIQ2xvdWQ5Q0EwHhcNMTgwMjAxMDA1MzA0WhcN
-				// MjgwMjAxMDA1MzA0WjBWMRMwEQYDVQQDEwpzc2xEb21haW5zMQ8wDQYDVQQDEwZD
-				// bG91ZDkxLjAsBgNVBAMTJWlkY3MtYTcxMjgzYzUyYWI1NGU4MTk3YTM3ZDEwY2U0
-				// MTU4OTAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCX63qL22k4hLZP
-				// kwm8mX/z4hf5H+TJU1xn4eZZCxl2bVsv+/oeOJ9jZGRPBypAfhw0subcrWEUY/DG
-				// tP2k6FVhWziKI0+IKtyDiqdKWTL9GHeTgv72UyWH8bLGldew7i/roUSAief1SuG0
-				// rRKzZvGRvSilt2WoSbIILqbNF4trelmVnH0OF7sZ7P6xiapr0UFItypGViVmgOJm
-				// UmydYFe8q85h2aEEyxfrsoEE6EOcADG2sbmkvV9kAILns66vKoZCJpKApR0uDOyT
-				// 6Fc7AkE+WPtqltYNHOEVacH9fvpl+0rhJjFqPmhdIYl4PojffIjQiY6DOQvMGkAQ
-				// +9MObVOvAgMBAAGjMjAwMB0GA1UdDgQWBBSzOfzruaMvkz5zo4HIc4ts9DkYfzAP
-				// BgNVHQ8BAf8EBQMDB9gAMA0GCSqGSIb3DQEBCwUAA4IBAQA7nlM2+JDa6Ead7peX
-				// 2HuOUgxiYYMathjjx9gG/GBH2ZbDCoNniofgbYf3joBPw4sE2Gml9rcVYZETaBCX
-				// NqY346kQILpkKsFYO9bKzOM4rzms2WQJ9K0ZDjSClhqTqtxPhN4gSv9BFXpCqHtL
-				// tnX0prD79a70Lv+3qCP3goEa5H/EPNCNQ6cfoLQtLz4v82N/pCYkupmBVPJ8J+yg
-				// l6lblyh4LOy3QWFRXZlQkuCMko43ZWZ5XOywmLO6cVT+It17unbylPG/p3h9YGBi
-				// Ek6xJzmpXj4onsVLQ53tzhV5Tb5W2LY3Etytw5x9jICvxVD51gHmwUBZSqIpFIAe 0a12";
 				encodedCert.append(
 						"MIIDXzCCAkegAwIBAgIGAWFO2ktsMA0GCSqGSIb3DQEBCwUAMFcxEzARBgoJkiaJ k/IsZAEZFgNjb20xFjAUBgoJkiaJk/IsZAEZFgZvcmFjbGUxFTATBgoJkiaJk/Is ZAEZFgVjbG91ZDERMA8GA1UEAxMIQ2xvdWQ5Q0EwHhcNMTgwMjAxMDA1MzA0WhcN MjgwMjAxMDA1MzA0WjBWMRMwEQYDVQQDEwpzc2xEb21haW5zMQ8wDQYDVQQDEwZD bG91ZDkxLjAsBgNVBAMTJWlkY3MtYTcxMjgzYzUyYWI1NGU4MTk3YTM3ZDEwY2U0 MTU4OTAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCX63qL22k4hLZP kwm8mX/z4hf5H+TJU1xn4eZZCxl2bVsv+/oeOJ9jZGRPBypAfhw0subcrWEUY/DG tP2k6FVhWziKI0+IKtyDiqdKWTL9GHeTgv72UyWH8bLGldew7i/roUSAief1SuG0 rRKzZvGRvSilt2WoSbIILqbNF4trelmVnH0OF7sZ7P6xiapr0UFItypGViVmgOJm UmydYFe8q85h2aEEyxfrsoEE6EOcADG2sbmkvV9kAILns66vKoZCJpKApR0uDOyT 6Fc7AkE+WPtqltYNHOEVacH9fvpl+0rhJjFqPmhdIYl4PojffIjQiY6DOQvMGkAQ +9MObVOvAgMBAAGjMjAwMB0GA1UdDgQWBBSzOfzruaMvkz5zo4HIc4ts9DkYfzAP BgNVHQ8BAf8EBQMDB9gAMA0GCSqGSIb3DQEBCwUAA4IBAQA7nlM2+JDa6Ead7peX 2HuOUgxiYYMathjjx9gG/GBH2ZbDCoNniofgbYf3joBPw4sE2Gml9rcVYZETaBCX NqY346kQILpkKsFYO9bKzOM4rzms2WQJ9K0ZDjSClhqTqtxPhN4gSv9BFXpCqHtL tnX0prD79a70Lv+3qCP3goEa5H/EPNCNQ6cfoLQtLz4v82N/pCYkupmBVPJ8J+yg l6lblyh4LOy3QWFRXZlQkuCMko43ZWZ5XOywmLO6cVT+It17unbylPG/p3h9YGBi Ek6xJzmpXj4onsVLQ53tzhV5Tb5W2LY3Etytw5x9jICvxVD51gHmwUBZSqIpFIAe 0a12");
 				encodedCert.append("\n-----END CERTIFICATE-----\n");
@@ -195,7 +170,6 @@ public class SAMLServlet extends HttpServlet {
 			throw new ServletException(e);
 		}
 		if (!INITIALIZED) {
-			// DO some error handling
 			request.setAttribute("URL", url);
 			request.setAttribute("app", app);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/configure.jsp");
@@ -204,7 +178,6 @@ public class SAMLServlet extends HttpServlet {
 
 		} else {
 
-			// Pretty simply way to build a SAML Request. Beats building a DOM...
 			String[] args = new String[5];
 			args[0] = url;
 			args[1] = IDP_URL;
@@ -216,17 +189,14 @@ public class SAMLServlet extends HttpServlet {
 			String requestXml = html.format(args);
 			byte[] input = requestXml.getBytes("UTF-8");
 
-			// Deflate that XML
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			Deflater d = new Deflater(Deflater.DEFLATED, true);
 			DeflaterOutputStream dout = new DeflaterOutputStream(baos, d);
 			dout.write(input);
 			dout.close();
 
-			// B64 encode it
 			String encodedRequest = Base64.encodeBase64String(baos.toByteArray());
 
-			// URLEncode it
 			String SAMLRequest = URLEncoder.encode(encodedRequest, "UTF-8");
 
 			// Redirect that browser
@@ -247,29 +217,28 @@ public class SAMLServlet extends HttpServlet {
 		System.out.println("validating incoming SAML assertion ....");
 
 		String url = request.getRequestURL().toString();
-		// herokuism
 		url = url.replaceFirst("http", "https");
-
-		// Get the SAMLResponse and RelayState
 		String encodedResponse = request.getParameter("SAMLResponse");
 		System.out.println(encodedResponse);
 		String relayState = request.getParameter("RelayState");
 		if ((relayState == null) || (relayState.equals("")))
 			relayState = "/";
 
-		// validate the response
 		SAMLValidator sv = new SAMLValidator();
 		try {
 			Identity identity = sv.validate(encodedResponse, IDP_PUBLIC_KEY, null, ISSUER, url, url);
-			// DO something with the Identity
+
 			JSONObject identityJSON = new JSONObject();
 			identityJSON.put("subject", identity.getSubject());
 			Bag attributes = identity.getAttributes();
 			Set keySet = attributes.keySet();
 			Iterator iterator = keySet.iterator();
+			System.out.println(identity.getSubject());
+			System.out.println("printed subject ....");
 			while (iterator.hasNext()) {
 				String key = (String) iterator.next();
 				identityJSON.put(key, (ArrayList<String>) attributes.getValues(key));
+				System.out.println(key + "    " + attributes.getValues(key));
 			}
 			Cookie identityCookie = new Cookie("IDENTITY",
 					Base64.encodeBase64URLSafeString(identityJSON.toString().getBytes("UTF-8")));
@@ -278,6 +247,13 @@ public class SAMLServlet extends HttpServlet {
 			response.sendError(401, "Access Denied: " + e.getMessage());
 			return;
 		}
+
+		// put your logic here
+		// condition 1. redirect response.sendRedirect("some url"); to error page for
+		// user1
+		// condition 2. redirect response.sendRedirect("some other url"); to success
+		// page
+		// create two html page and use redirects.
 		System.out.println("done validating assertion ....");
 		response.sendRedirect(relayState);
 

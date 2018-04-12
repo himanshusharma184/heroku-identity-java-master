@@ -26,7 +26,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.salesforce.saml;
+package com.samltestapp.saml;
 
 public class SAMLException extends Exception{
 

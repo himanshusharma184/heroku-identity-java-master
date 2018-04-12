@@ -26,12 +26,13 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.salesforce.saml;
+package com.samltestapp.saml;
 
-import com.salesforce.util.Bag;
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.samltestapp.util.Bag;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;

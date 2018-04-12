@@ -32,7 +32,7 @@
  */
 
 
-package com.salesforce.saml;
+package com.samltestapp.saml;
 
 import org.apache.commons.codec.binary.Base64;
 import org.w3c.dom.Document;

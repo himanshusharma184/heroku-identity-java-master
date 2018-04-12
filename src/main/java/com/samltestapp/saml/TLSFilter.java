@@ -1,4 +1,4 @@
-package com.salesforce.saml;
+package com.samltestapp.saml;
 
 import java.io.IOException;
 import javax.servlet.*;

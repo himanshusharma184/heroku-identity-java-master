@@ -1,4 +1,4 @@
-package com.salesforce.saml;
+package com.samltestapp.saml;
 
 public class InvalidSignatureException extends Exception{
     public InvalidSignatureException() {
