@@ -25,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -238,24 +239,31 @@ public class SAMLServlet extends HttpServlet {
 			while (iterator.hasNext()) {
 				String key = (String) iterator.next();
 				identityJSON.put(key, (ArrayList<String>) attributes.getValues(key));
-				System.out.println(key + "    " + attributes.getValues(key));
+				// System.out.println(key + " " + attributes.getValues(key));
 			}
 			Cookie identityCookie = new Cookie("IDENTITY",
 					Base64.encodeBase64URLSafeString(identityJSON.toString().getBytes("UTF-8")));
-			response.addCookie(identityCookie);
+
+			if (identity.getSubject().equals("jeremypwctes@gmail.com")) {
+				response.setContentType("text/html");
+				PrintWriter out;
+				out = response.getWriter();
+				out.println("<body style=\"background-color:Tomato\">");
+
+				out.println("<h1>" + "You are not provisioned in OIM" + "</h1>");
+				out.println("<br>");
+
+				request.getSession().invalidate();
+
+			} else {
+				// System.out.println("done validating assertion ....");
+				response.addCookie(identityCookie);
+				response.sendRedirect(relayState);
+			}
 		} catch (Exception e) {
 			response.sendError(401, "Access Denied: " + e.getMessage());
 			return;
 		}
-
-		// put your logic here
-		// condition 1. redirect response.sendRedirect("some url"); to error page for
-		// user1
-		// condition 2. redirect response.sendRedirect("some other url"); to success
-		// page
-		// create two html page and use redirects.
-		System.out.println("done validating assertion ....");
-		response.sendRedirect(relayState);
 
 	}
 
