@@ -20,9 +20,19 @@
 		<servlet-class>com.samltestapp.saml.SAMLServlet</servlet-class>
 	</servlet>
 
+	<servlet>
+		<servlet-name>LogoutServlet</servlet-name>
+		<servlet-class>com.samltestapp.saml.LogoutServlet</servlet-class>
+	</servlet>
+
 	<servlet-mapping>
 		<servlet-name>SAMLServlet</servlet-name>
 		<url-pattern>/_saml</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>LogoutServlet</servlet-name>
+		<url-pattern>/logout</url-pattern>
 	</servlet-mapping>
 
 </web-app>

@@ -254,6 +254,8 @@ public class SAMLServlet extends HttpServlet {
 				out.println("<br>");
 
 				request.getSession().invalidate();
+				response.addCookie(null);
+				// request.getSession().
 
 			} else {
 				// System.out.println("done validating assertion ....");
