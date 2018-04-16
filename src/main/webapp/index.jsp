@@ -38,17 +38,16 @@
 					<%
 						ArrayList<String> values = (ArrayList<String>) attributes.getValues(key);
 								for (String value : values) {
-					%><%=value%><br />
-					<%
-						}
-					%>
+					%><%=value%><br /> <%
+ 	}
+ %>
 				</td>
 			</tr>
 			<%
 				}
 			%>
 		</table>
-		<br> <a href="/_saml?logout=true" class="button center">Logout</a>
+		<br> <a href="/logout" class="button center">Logout</a>
 	</center>
 	<%
 		} else {
