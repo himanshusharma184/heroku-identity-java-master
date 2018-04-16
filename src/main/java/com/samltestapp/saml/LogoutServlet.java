@@ -45,7 +45,6 @@ public class LogoutServlet extends HttpServlet {
 		Cookie cookie = new Cookie("IDENTITY", "");
 		cookie.setMaxAge(0);
 		response.addCookie(cookie);
-		response.sendRedirect("/");
 
 		String url = request.getRequestURL().toString();
 		url = url.replaceFirst("http", "https");
