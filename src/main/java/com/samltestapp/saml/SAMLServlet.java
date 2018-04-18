@@ -263,6 +263,7 @@ public class SAMLServlet extends HttpServlet {
 				response.sendRedirect(relayState);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.sendError(401, "Access Denied: " + e.getMessage());
 			return;
 		}
