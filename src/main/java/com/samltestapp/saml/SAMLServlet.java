@@ -55,8 +55,6 @@ public class SAMLServlet extends HttpServlet {
 	private String IDP_URL = null;
 	private PublicKey IDP_PUBLIC_KEY = null;
 
-	private String email = null;
-
 	@Override
 	public void init() throws ServletException {
 		Scanner scanner;
@@ -154,20 +152,13 @@ public class SAMLServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		if (request.getCookies() != null) {
-			for (Cookie cookie : request.getCookies()) {
-				cookie.setValue("");
-				cookie.setMaxAge(0);
-				cookie.setPath("/");
-
-				response.addCookie(cookie);
-			}
-		}
 		String logout = request.getParameter("logout");
 		if (logout != null) {
+			Cookie cookie = new Cookie("IDENTITY", "");
+			cookie.setMaxAge(0);
+			response.addCookie(cookie);
 			response.sendRedirect("/");
 			return;
-
 		}
 
 		String url = request.getRequestURL().toString();
@@ -253,19 +244,18 @@ public class SAMLServlet extends HttpServlet {
 			Cookie identityCookie = new Cookie("IDENTITY",
 					Base64.encodeBase64URLSafeString(identityJSON.toString().getBytes("UTF-8")));
 			// cutom code
-			this.email = identity.getSubject();
 			if (identity.getSubject().equals("sharma.himanshu@pwc.com")) {
 				response.setContentType("text/html");
 				PrintWriter out;
 				out = response.getWriter();
 				out.println("<body style=\"background-color:Tomato\">");
 
-				out.println("<h1>" + "You dont have access. " + "</h1>");
 				out.println("	<br>You have access </br> <br> <a href=\"/_saml?logout=true\"\n"
 						+ "			class=\"button center\">Logout</a>");
 				out.println("<br>");
 
 				request.getSession().invalidate();
+				response.addCookie(null);
 
 			} else {
 				response.addCookie(identityCookie);
