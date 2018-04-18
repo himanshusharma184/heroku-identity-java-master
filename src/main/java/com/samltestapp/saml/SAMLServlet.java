@@ -255,6 +255,8 @@ public class SAMLServlet extends HttpServlet {
 				out.println("<body style=\"background-color:Tomato\">");
 
 				out.println("<h1>" + "You dont have access. " + "</h1>");
+				out.println("	<br>You have access </br> <br> <a href=\"/_saml?logout=true\"\n"
+						+ "			class=\"button center\">Logout</a>");
 				out.println("<br>");
 
 				request.getSession().invalidate();
