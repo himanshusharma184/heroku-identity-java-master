@@ -153,15 +153,13 @@ public class SAMLServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		for (Cookie cookie : request.getCookies()) {
+		    cookie.setValue("");
+		    cookie.setMaxAge(0);
+		    cookie.setPath("/");
 
-		String logout = request.getParameter("logout");
-		if (logout != null) {
-			Cookie cookie = new Cookie("IDENTITY", "");
-			cookie.setMaxAge(0);
-			response.addCookie(cookie);
-			response.sendRedirect("/");
-			return;
-
+		    response.addCookie(cookie);
 		}
 
 		String url = request.getRequestURL().toString();
