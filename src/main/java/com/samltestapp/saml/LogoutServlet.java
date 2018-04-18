@@ -41,8 +41,6 @@ public class LogoutServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		System.out.println("logout servlet called .......");
-		// String slo =
-		// "https://idcs-a71283c52ab52ab54e8197a37d10ce415890.identity.oraclecloud.com/fed/v1/sp/slo";
 		String slo = "https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/fed/v1/sp/slo";
 		Cookie cookie = new Cookie("IDENTITY", "");
 		cookie.setMaxAge(0);
@@ -79,8 +77,6 @@ public class LogoutServlet extends HttpServlet {
 		String SAMLRequest = URLEncoder.encode(encodedRequest, "UTF-8");
 		String relayState = request.getParameter("RelayState");
 		String redirect = slo + "?SAMLRequest=" + SAMLRequest;
-		if (relayState != null)
-			redirect += "&RelayState=" + relayState;
 		response.sendRedirect(redirect);
 
 	}

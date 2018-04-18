@@ -243,8 +243,8 @@ public class SAMLServlet extends HttpServlet {
 			}
 			Cookie identityCookie = new Cookie("IDENTITY",
 					Base64.encodeBase64URLSafeString(identityJSON.toString().getBytes("UTF-8")));
-
-			if (identity.getSubject().equals("jeremypwctes@gmail.com")) {
+			// cutom code
+			if (identity.getSubject().equals("sharma.himanshu@pwc.com")) {
 				response.setContentType("text/html");
 				PrintWriter out;
 				out = response.getWriter();
