@@ -243,8 +243,8 @@ public class SAMLServlet extends HttpServlet {
 			}
 			Cookie identityCookie = new Cookie("IDENTITY",
 					Base64.encodeBase64URLSafeString(identityJSON.toString().getBytes("UTF-8")));
-//			// cutom code
-//			if (identity.getSubject().equals("sharma.himanshu@pwc.com")) {
+			// cutom code
+			if (identity.getSubject().equals("sharma.himanshu@pwc.com")) {
 				response.setContentType("text/html");
 				PrintWriter out;
 				out = response.getWriter();
@@ -254,14 +254,13 @@ public class SAMLServlet extends HttpServlet {
 				out.println("<br>");
 
 				request.getSession().invalidate();
-				//response.addCookie(null);
 				// request.getSession().
 
-//			} else {
-//				// System.out.println("done validating assertion ....");
-//				response.addCookie(identityCookie);
-//				response.sendRedirect(relayState);
-//			}
+			} else {
+				// System.out.println("done validating assertion ....");
+				response.addCookie(identityCookie);
+				response.sendRedirect(relayState);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.sendError(401, "Access Denied: " + e.getMessage());
