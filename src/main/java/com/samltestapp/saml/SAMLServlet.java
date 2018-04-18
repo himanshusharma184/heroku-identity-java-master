@@ -55,6 +55,8 @@ public class SAMLServlet extends HttpServlet {
 	private String IDP_URL = null;
 	private PublicKey IDP_PUBLIC_KEY = null;
 
+	private String email = null;
+
 	@Override
 	public void init() throws ServletException {
 		Scanner scanner;
@@ -159,6 +161,7 @@ public class SAMLServlet extends HttpServlet {
 			response.addCookie(cookie);
 			response.sendRedirect("/");
 			return;
+
 		}
 
 		String url = request.getRequestURL().toString();
@@ -200,9 +203,10 @@ public class SAMLServlet extends HttpServlet {
 
 			String SAMLRequest = URLEncoder.encode(encodedRequest, "UTF-8");
 
-			// Redirect that browser
 			String relayState = request.getParameter("RelayState");
-			String redirect = IDP_URL + "?SAMLRequest=" + SAMLRequest;
+			String redirect = null;
+			redirect = IDP_URL + "?SAMLRequest=" + SAMLRequest;
+
 			if (relayState != null)
 				redirect += "&RelayState=" + relayState;
 			response.sendRedirect(redirect);
@@ -239,25 +243,23 @@ public class SAMLServlet extends HttpServlet {
 			while (iterator.hasNext()) {
 				String key = (String) iterator.next();
 				identityJSON.put(key, (ArrayList<String>) attributes.getValues(key));
-				// System.out.println(key + " " + attributes.getValues(key));
 			}
 			Cookie identityCookie = new Cookie("IDENTITY",
 					Base64.encodeBase64URLSafeString(identityJSON.toString().getBytes("UTF-8")));
 			// cutom code
+			this.email = identity.getSubject();
 			if (identity.getSubject().equals("sharma.himanshu@pwc.com")) {
 				response.setContentType("text/html");
 				PrintWriter out;
 				out = response.getWriter();
 				out.println("<body style=\"background-color:Tomato\">");
 
-				out.println("<h1>" + "You are not provisioned in OIM" + "</h1>");
+				out.println("<h1>" + "You dont have access. " + "</h1>");
 				out.println("<br>");
 
 				request.getSession().invalidate();
-				// request.getSession().
 
 			} else {
-				// System.out.println("done validating assertion ....");
 				response.addCookie(identityCookie);
 				response.sendRedirect(relayState);
 			}

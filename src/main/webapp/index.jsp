@@ -47,7 +47,8 @@
 				}
 			%>
 		</table>
-		<br> <a href="/logout" class="button center">Logout</a>
+		<br>You have access </br> <br> <a href="/_saml?logout=true"
+			class="button center">Logout</a>
 	</center>
 	<%
 		} else {

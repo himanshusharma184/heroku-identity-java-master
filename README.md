@@ -1,8 +1,5 @@
-heroku-identity-java
-====================
+Service provider for SAML 2.0
+Based on heroku Java SP. 
 
-A sample java app that integrates with Salesforce Identity.   Run it!
-
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/salesforceidentity/heroku-identity-java)
 
 

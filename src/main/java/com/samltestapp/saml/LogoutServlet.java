@@ -73,10 +73,12 @@ public class LogoutServlet extends HttpServlet {
 		dout.close();
 
 		String encodedRequest = Base64.encodeBase64String(baos.toByteArray());
-
+		request.getSession().invalidate();
+		// request.getSession().getSessionContext().
 		String SAMLRequest = URLEncoder.encode(encodedRequest, "UTF-8");
 		String relayState = request.getParameter("RelayState");
 		String redirect = slo + "?SAMLRequest=" + SAMLRequest;
+
 		response.sendRedirect(redirect);
 
 	}
