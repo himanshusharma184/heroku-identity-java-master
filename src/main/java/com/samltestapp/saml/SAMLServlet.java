@@ -255,7 +255,7 @@ public class SAMLServlet extends HttpServlet {
 				out.println("<br>");
 
 				request.getSession().invalidate();
-				response.addCookie(null);
+				response.addCookie(new Cookie("IDENTITY", ""));
 
 			} else {
 				response.addCookie(identityCookie);
