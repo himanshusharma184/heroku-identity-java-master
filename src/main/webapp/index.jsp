@@ -47,7 +47,7 @@
 				}
 			%>
 		</table>
-		<br>You have access </br> <br> <a href="?logout=true"
+		<br>You have access </br> <br> <a href="/_saml?logout=true"
 			class="button center">Logout</a>
 	</center>
 	<%
