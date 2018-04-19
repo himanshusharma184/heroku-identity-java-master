@@ -169,6 +169,8 @@ public class SAMLServlet extends HttpServlet {
 					response.addCookie(cookie);
 				}
 			}
+			response.sendRedirect("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/sso/v1/user/logout");
+			
 			return;
 		}
 
