@@ -151,13 +151,24 @@ public class SAMLServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		System.out.println("at cookie validation");
 		String logout = request.getParameter("logout");
 		if (logout != null) {
-			Cookie cookie = new Cookie("IDENTITY", "");
-			cookie.setMaxAge(0);
-			response.addCookie(cookie);
-			response.sendRedirect("/");
+			System.out.println("at cooki deletion new code ...");
+			Cookie[] cookies = request.getCookies();
+
+			// Delete all the cookies
+			if (cookies != null) {
+
+				for (int i = 0; i < cookies.length; i++) {
+
+					Cookie cookie = cookies[i];
+					System.out.println("Deleting cookie :: " + cookie.getName());
+					cookies[i].setValue(null);
+					cookies[i].setMaxAge(0);
+					response.addCookie(cookie);
+				}
+			}
 			return;
 		}
 
