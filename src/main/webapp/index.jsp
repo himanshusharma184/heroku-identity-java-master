@@ -47,7 +47,7 @@
 				}
 			%>
 		</table>
-		<br>You have access </br> <br> <a href="/_saml?logout=true"
+		<br>You have access </br> <br> <a href="https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/sso/v1/user/logout"
 			class="button center">Logout</a>
 	</center>
 	<%
