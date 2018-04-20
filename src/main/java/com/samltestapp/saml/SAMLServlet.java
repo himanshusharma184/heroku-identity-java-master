@@ -187,7 +187,7 @@ public class SAMLServlet extends HttpServlet {
 	        CookieManager cookieManager = new CookieManager();
 	        java.net.CookieHandler.setDefault(cookieManager);
 	        
-	        URL obj = new URL("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/fed/v1/user/request/logout");
+	        URL obj = new URL("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/ui/v1/signin");
 	        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 	        System.out.println("Obtained URL connection");
 	        
@@ -201,13 +201,15 @@ public class SAMLServlet extends HttpServlet {
 	            System.out.println("Value : " + cookie.getValue());
 	            System.out.println("Age : " + cookie.getMaxAge());
 	            if(clearCookieSet.contains(cookie.getName())){
-	                cookie.setValue(null);
+	            	System.out.println("Deleting cookie :: " + cookie.getName());
+					cookie.setValue(null);
 	                cookie.setMaxAge(0);
 	            }
 	        }
 	        System.out.println("Updating cookies");
 	        con.connect();
 	        System.out.println("IDCS cookie deletion end....");
+	        con.disconnect();
 	        
 			response.sendRedirect("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/oauth2/v1/userlogout");
 			return;	
