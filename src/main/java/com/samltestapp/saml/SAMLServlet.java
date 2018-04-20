@@ -155,7 +155,7 @@ public class SAMLServlet extends HttpServlet {
 		String logout = request.getParameter("logout");
 		String partnername = request.getParameter("partnername");
 		String returnurl = request.getParameter("returnurl");
-		if (Boolean.valueOf(logout)) {
+		if (null == partnername && Boolean.valueOf(logout)) {
 			System.out.println("application cookie deletion....");
 			Cookie[] cookies = request.getCookies();
 
@@ -171,10 +171,10 @@ public class SAMLServlet extends HttpServlet {
 					response.addCookie(cookie);
 				}
 			}
-			response.sendRedirect("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/fed/v1/idp/initiatesso?partnername=samltest&returnurl=https://samltesthsr.herokuapp.com/_saml?logout=true");
+			response.sendRedirect("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/fed/v1/idp/initiatesso?partnername=samltest&logout=true");
 			return;
 			
-		} else if (null != returnurl && "samltest".equalsIgnoreCase(partnername)) {
+		} else if (Boolean.valueOf(logout) && "samltest".equalsIgnoreCase(partnername)) {
 			System.out.println("IDCS cookie deletion....");
 			Cookie[] cookies = request.getCookies();
 
