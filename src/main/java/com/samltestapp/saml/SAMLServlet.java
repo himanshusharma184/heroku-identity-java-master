@@ -153,8 +153,10 @@ public class SAMLServlet extends HttpServlet {
 			throws ServletException, IOException {
 		System.out.println("at cookie validation");
 		String logout = request.getParameter("logout");
-		if (logout != null) {
-			System.out.println("at cooki deletion new code ...");
+		String partnername = request.getParameter("partnername");
+		String returnurl = request.getParameter("returnurl");
+		if (Boolean.valueOf(logout)) {
+			System.out.println("application cookie deletion....");
 			Cookie[] cookies = request.getCookies();
 
 			// Delete all the cookies
@@ -169,11 +171,29 @@ public class SAMLServlet extends HttpServlet {
 					response.addCookie(cookie);
 				}
 			}
-			response.sendRedirect("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/sso/v1/user/logout");
+			response.sendRedirect("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/fed/v1/idp/initiatesso?partnername=samltest&returnurl=https://samltesthsr.herokuapp.com/_saml?logout=true");
+			return;
 			
+		} else if (null != returnurl && "samltest".equalsIgnoreCase(partnername)) {
+			System.out.println("IDCS cookie deletion....");
+			Cookie[] cookies = request.getCookies();
+
+			// Delete all the cookies
+			if (cookies != null) {
+
+				for (int i = 0; i < cookies.length; i++) {
+
+					Cookie cookie = cookies[i];
+					System.out.println("Deleting cookie :: " + cookie.getName());
+					cookies[i].setValue(null);
+					cookies[i].setMaxAge(0);
+					response.addCookie(cookie);
+				}
+			}			
+			response.sendRedirect("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/oauth2/v1/userlogout");
 			return;
 		}
-
+		
 		String url = request.getRequestURL().toString();
 		// herokuism
 		url = url.replaceFirst("http", "https");
