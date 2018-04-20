@@ -211,6 +211,12 @@ public class SAMLServlet extends HttpServlet {
 	        System.out.println("IDCS cookie deletion end....");
 	        con.disconnect();
 	        
+	        for(String name : clearCookieSet){
+	        	Cookie cookie = new Cookie(name, null);
+	        	cookie.setMaxAge(0);
+	        	response.addCookie(cookie);
+	        }
+	        
 			response.sendRedirect("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/oauth2/v1/userlogout");
 			return;	
 		}
