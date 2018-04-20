@@ -187,7 +187,7 @@ public class SAMLServlet extends HttpServlet {
 	        CookieManager cookieManager = new CookieManager();
 	        java.net.CookieHandler.setDefault(cookieManager);
 	        
-	        URL obj = new URL("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/ui/v1/signin");
+	        URL obj = new URL("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/fed/v1/user/request/logout");
 	        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 	        System.out.println("Obtained URL connection");
 	        
