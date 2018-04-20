@@ -10,6 +10,7 @@ import org.xml.sax.InputSource;
 import com.samltestapp.util.Bag;
 import com.samltestapp.util.XSDDateTime;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -27,8 +28,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.CookieManager;
+import java.net.HttpCookie;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
@@ -36,7 +40,9 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.UUID;
@@ -170,39 +176,41 @@ public class SAMLServlet extends HttpServlet {
 					cookies[i].setMaxAge(0);
 					response.addCookie(cookie);
 				}
-				
-				Cookie ORA_OCIS_1 = new Cookie("ORA_OCIS_1", null);
-				ORA_OCIS_1.setMaxAge(0);
-				System.out.println("Deleting cookie :: " + ORA_OCIS_1.getName());
-				response.addCookie(ORA_OCIS_1);
-				
-				Cookie ORA_OCIS_REQ_1 = new Cookie("ORA_OCIS_REQ_1", null);
-				ORA_OCIS_REQ_1.setMaxAge(0);
-				System.out.println("Deleting cookie :: " + ORA_OCIS_REQ_1.getName());
-				response.addCookie(ORA_OCIS_REQ_1);
-				
 			}
-			response.sendRedirect("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/oauth2/v1/userlogout");
-			return;
 			
-		} else if (Boolean.valueOf(logout) && "samltest".equalsIgnoreCase(partnername)) {
-			System.out.println("IDCS cookie deletion....");
-			Cookie[] cookies = request.getCookies();
-
-			// Delete all the cookies
-			if (cookies != null) {
-
-				for (int i = 0; i < cookies.length; i++) {
-
-					Cookie cookie = cookies[i];
-					System.out.println("Deleting cookie :: " + cookie.getName());
-					cookies[i].setValue(null);
-					cookies[i].setMaxAge(0);
-					response.addCookie(cookie);
-				}
-			}			
+			System.out.println("IDCS cookie deletion start....");
+	        HashSet<String> clearCookieSet = new HashSet<String>();
+	        clearCookieSet.add("ORA_OCIS_REQ_1");
+	        clearCookieSet.add("ORA_OTD_JROUTE");
+	        clearCookieSet.add("ORA_OCIS_1");
+	        
+	        CookieManager cookieManager = new CookieManager();
+	        java.net.CookieHandler.setDefault(cookieManager);
+	        
+	        URL obj = new URL("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/fed/v1/user/request/logout");
+	        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+	        System.out.println("Obtained URL connection");
+	        
+	        con.getContent();
+	        System.out.println("Fetching cookie details");
+	        List<HttpCookie> cookieList = cookieManager.getCookieStore().getCookies();
+	        // iterate HttpCookie object
+	        for (HttpCookie cookie : cookieList)
+	        {
+	            System.out.println("Name : " + cookie.getName());
+	            System.out.println("Value : " + cookie.getValue());
+	            System.out.println("Age : " + cookie.getMaxAge());
+	            if(clearCookieSet.contains(cookie.getName())){
+	                cookie.setValue(null);
+	                cookie.setMaxAge(0);
+	            }
+	        }
+	        System.out.println("Updating cookies");
+	        con.connect();
+	        System.out.println("IDCS cookie deletion end....");
+	        
 			response.sendRedirect("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/oauth2/v1/userlogout");
-			return;
+			return;	
 		}
 		
 		String url = request.getRequestURL().toString();
