@@ -170,8 +170,19 @@ public class SAMLServlet extends HttpServlet {
 					cookies[i].setMaxAge(0);
 					response.addCookie(cookie);
 				}
+				
+				Cookie ORA_OCIS_1 = new Cookie("ORA_OCIS_1", null);
+				ORA_OCIS_1.setMaxAge(0);
+				System.out.println("Deleting cookie :: " + ORA_OCIS_1.getName());
+				response.addCookie(ORA_OCIS_1);
+				
+				Cookie ORA_OCIS_REQ_1 = new Cookie("ORA_OCIS_REQ_1", null);
+				ORA_OCIS_REQ_1.setMaxAge(0);
+				System.out.println("Deleting cookie :: " + ORA_OCIS_REQ_1.getName());
+				response.addCookie(ORA_OCIS_REQ_1);
+				
 			}
-			response.sendRedirect("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/fed/v1/idp/initiatesso?partnername=samltest&logout=true");
+			response.sendRedirect("https://idcs-a71283c52ab54e8197a37d10ce415890.identity.oraclecloud.com/oauth2/v1/userlogout");
 			return;
 			
 		} else if (Boolean.valueOf(logout) && "samltest".equalsIgnoreCase(partnername)) {
